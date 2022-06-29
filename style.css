@@ -1,0 +1,25 @@
+body {
+    display: flex;
+}
+
+nav#projects {
+    min-width: 75px;
+}
+
+#display {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+item.high{
+    background-color: lightcoral;
+}
+
+item.med{
+    background-color: goldenrod;
+}
+
+item.lo{
+    background-color: aquamarine;
+}
