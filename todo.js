@@ -59,8 +59,13 @@ let display = (() => {
 
         const input = document.createElement('input');
         input.type = 'checkbox';
+<<<<<<< Updated upstream
         input.checked = goal.isCompleted;
         input.addEventListener('toggle', _changegoalCompletionStatus(input, goal));
+=======
+        input.setAttribute("for", )//SOME SORT OF ID
+        input.addEventListener('toggle', _changeItemCompletionStatus);
+>>>>>>> Stashed changes
 
         const title = document.createElement('span');
         title.innerHTML = goal.title;
@@ -72,6 +77,7 @@ let display = (() => {
 
     const _populateGoalsList = () => {
         const display = document.getElementById('display');
+<<<<<<< Updated upstream
         
         while(display.hasChildNodes())
         {
@@ -79,6 +85,10 @@ let display = (() => {
         }
 
         for(const goal of _projects[_activeProject])
+=======
+
+        for(const item of _projects[_activeProject])
+>>>>>>> Stashed changes
         {
             display.appendChild(_creategoalElement(goal));
         }
