@@ -1,5 +1,5 @@
-//todo goal factory function
-let goal = (title, description, isCompleted) => {
+//todo task factory function
+let task = (title, description, isCompleted) => {
 
     return {title, description, isCompleted}; //, creationDate, dueDate};    
     // return {title, description, dueDate, creationDate, parentProject}
@@ -7,40 +7,35 @@ let goal = (title, description, isCompleted) => {
 
 let display = (() => {
     let _projects = {
-        defaultProject: [goal('sampleTitle', 'sampledescription', false),
-                         goal('another note', 'sampledescription', true)],
+        defaultProject: [task('sampleTitle', 'sampledescription', false),
+                         task('another note', 'sampledescription', true)],
 
-        'get a job' : [goal('complete the Odin Project', 'sampledescription', false),
-                      goal('make a capstone project', 'sampledescription', false),
-                      goal('apply for 50 jobs', 'sampledescription', false),
-                      goal('finish "Cracking the Coding interview"', 'sampledescription', false),]
+        'get a job' : [task('complete the Odin Project', 'sampledescription', false),
+                      task('make a capstone project', 'sampledescription', false),
+                      task('apply for 50 jobs', 'sampledescription', false),
+                      task('finish "Cracking the Coding interview"', 'sampledescription', false),]
     };
 
     let _activeProject = 'defaultProject';
 
     const _initialize = () => {
-        //give addToDo goal button function
-        const addgoal = document.getElementById('addgoal');
+        // give addToDo task button function
+        const addtask = document.getElementById('addtask');
         
-        //populate to do table
         // const display = document.getElementById('display');
-        //clear children
-        //get active
         _populateProjectsList();
-        _populateGoalsList();
-        _createAddGoalButton();
+        _populateTasksList();
+        _createAddTaskButton();
     };
 
-    const _createAddGoalButton = () => {
+    const _createAddTaskButton = () => {
         const display = document.getElementById('display');
         
         const addButton = document.createElement('div');
         addButton.addEventListener('click', () => {
-
-            _createEditGoalWindow;
-
+            _createEditTaskWindow();
         });
-        addButton.innerText = '+ Add Goal';
+        addButton.innerText = '+ Add Task';
         
 
         addButton.type = 'text';
@@ -52,45 +47,55 @@ let display = (() => {
     const _populateProjectsList = () => {
         const projectsTab = document.getElementById('projects');
 
-        //iterate through and create a goal element
+        //iterate through and create a task element
         Object.keys(_projects).forEach(name => {
             const project = document.createElement('div');
             project.innerHTML = name;
             project.addEventListener('click', () =>
             {
                 _activeProject = project.innerHTML;
-                _populateGoalsList();
+                _clearDisplayedTasks();
+                _populateTasksList();
+                _createAddTaskButton();
             });
 
             projectsTab.appendChild(project);            
         });
     };
 
-    const _createEditGoalWindow = () => {
-        console.log("edit goal window")
+    const _createEditTaskWindow = (item) => {
+        const display = document.getElementById('addTask');
+        const editTask = document.createElement('div');
+
+        const title = document.createElement('input');
+        title.type = 'text';
+        // title.input=
+
+        console.log("edit task window");
     };
 
-    //helper function for populating goals display
-    const _creategoalElement = (goal) => {
+    //helper function for populating tasks display
+    const _createtaskElement = (task) => {
         const tempDiv = document.createElement('div');
-        tempDiv.classList.add('goal');
+        tempDiv.classList.add('task');
 
         const input = document.createElement('input');
         input.type = 'checkbox';
-        input.checked = goal.isCompleted;
-        input.addEventListener('change', () => {goal.isCompleted = input.checked;});
+        input.checked = task.isCompleted;
+        input.addEventListener('change', () => {task.isCompleted = input.checked;});
 
         const title = document.createElement('span');
-        title.innerText = goal.title;
+        title.innerText = task.title;
 
         const edit = document.createElement('span');
         edit.innerText = 'edit';
-        edit.addEventListener('click', _createEditGoalWindow)
+        edit.addEventListener('click', _createEditTaskWindow)
         
         const del = document.createElement('delete');
         del.innerText = 'del';
         del.addEventListener('click', () => {
             // _projects[_activeProject] = 
+
         });
 
         tempDiv.appendChild(input);
@@ -100,19 +105,22 @@ let display = (() => {
         return tempDiv;
     };
 
-    const _populateGoalsList = () => {
+    const _clearDisplayedTasks = () => {
         const display = document.getElementById('display');
-        
-        //clear display
         while(display.hasChildNodes())
-        {display.removeChild(display.firstChild);}
-
-        for(const goal of _projects[_activeProject])
-        {display.appendChild(_creategoalElement(goal));}
+            {display.removeChild(display.firstChild);}
     };
 
-    //helper function for adding a goal
-    const addGoal = () => 
+    const _populateTasksList = () => {
+        const display = document.getElementById('display');
+        for(const task of _projects[_activeProject])
+        {
+            display.appendChild(_createtaskElement(task));
+        }
+    };
+
+    //helper function for adding a task
+    const addTask = () => 
     {
 
     };
