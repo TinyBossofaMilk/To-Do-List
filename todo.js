@@ -1,5 +1,6 @@
 //todo goal factory function
 let goal = (title, description, isCompleted) => {
+
     return {title, description, isCompleted}; //, creationDate, dueDate};    
     // return {title, description, dueDate, creationDate, parentProject}
 };
@@ -18,15 +19,34 @@ let display = (() => {
     let _activeProject = 'defaultProject';
 
     const _initialize = () => {
-        //give addToDogoal button function
+        //give addToDo goal button function
         const addgoal = document.getElementById('addgoal');
         
         //populate to do table
-        const display = document.getElementById('display');
+        // const display = document.getElementById('display');
         //clear children
         //get active
         _populateProjectsList();
         _populateGoalsList();
+        _createAddGoalButton();
+    };
+
+    const _createAddGoalButton = () => {
+        const display = document.getElementById('display');
+        
+        const addButton = document.createElement('div');
+        addButton.addEventListener('click', () => {
+
+            _createEditGoalWindow;
+
+        });
+        addButton.innerText = '+ Add Goal';
+        
+
+        addButton.type = 'text';
+
+
+        display.appendChild(addButton);
     };
 
     const _populateProjectsList = () => {
@@ -46,54 +66,56 @@ let display = (() => {
         });
     };
 
-    const _changegoalCompletionStatus = (e, goal) => {
-        goal.isCompleted = e.checked;
-        console.log("_projects")
-        console.log(goal)
+    const _createEditGoalWindow = () => {
+        console.log("edit goal window")
     };
 
-    //helper function for populating display
+    //helper function for populating goals display
     const _creategoalElement = (goal) => {
         const tempDiv = document.createElement('div');
         tempDiv.classList.add('goal');
 
         const input = document.createElement('input');
         input.type = 'checkbox';
-<<<<<<< Updated upstream
         input.checked = goal.isCompleted;
-        input.addEventListener('toggle', _changegoalCompletionStatus(input, goal));
-=======
-        input.setAttribute("for", )//SOME SORT OF ID
-        input.addEventListener('toggle', _changeItemCompletionStatus);
->>>>>>> Stashed changes
+        input.addEventListener('change', () => {goal.isCompleted = input.checked;});
 
         const title = document.createElement('span');
-        title.innerHTML = goal.title;
+        title.innerText = goal.title;
+
+        const edit = document.createElement('span');
+        edit.innerText = 'edit';
+        edit.addEventListener('click', _createEditGoalWindow)
         
+        const del = document.createElement('delete');
+        del.innerText = 'del';
+        del.addEventListener('click', () => {
+            // _projects[_activeProject] = 
+        });
+
         tempDiv.appendChild(input);
         tempDiv.appendChild(title);
+        tempDiv.appendChild(edit);
+        tempDiv.appendChild(del);
         return tempDiv;
     };
 
     const _populateGoalsList = () => {
         const display = document.getElementById('display');
-<<<<<<< Updated upstream
         
+        //clear display
         while(display.hasChildNodes())
-        {
-            display.removeChild(display.firstChild);
-        }
+        {display.removeChild(display.firstChild);}
 
         for(const goal of _projects[_activeProject])
-=======
-
-        for(const item of _projects[_activeProject])
->>>>>>> Stashed changes
-        {
-            display.appendChild(_creategoalElement(goal));
-        }
+        {display.appendChild(_creategoalElement(goal));}
     };
 
+    //helper function for adding a goal
+    const addGoal = () => 
+    {
+
+    };
 
     _initialize();
 }) ();
