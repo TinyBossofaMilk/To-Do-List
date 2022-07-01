@@ -1,11 +1,22 @@
+* {    
+    margin: 0;
+    padding: 0;
+}
+
 :root{
     --section-padding: 10px;
     --task-padding: 7px;
+
+    
 }
 
 body{
     margin: 0;
     padding: 0;
+}
+
+header{
+    padding: 10px 15px;
 }
 
 #main {
@@ -16,12 +27,20 @@ body{
 
 nav#projects {
     /* flex-grow: 1; */
-    min-width: 150px;
+    min-width: 200px;
     background-color: mistyrose;
     font-size: large;
     font-weight:800;
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    /* padding: var(--section-padding); */
+}
+
+#projects div{
     padding: var(--section-padding);
+}
+
+#projects div:hover{
+    background-color: rgb(248, 179, 171);
 }
 
 #display {
@@ -31,15 +50,15 @@ nav#projects {
 }
 
 #display{
-    padding: 10px;
-    gap: 5px;
     background-color: aliceblue;
 }
 
 .task {
     display: flex;
+    padding: var(--task-padding);
     /* justify-content: baseline; */
 }
+
 .task:hover {
     background-color: steelblue;
 }

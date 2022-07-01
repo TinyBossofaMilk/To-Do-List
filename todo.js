@@ -42,7 +42,7 @@ let display = (() => {
             addButton.remove();
             _createEditTaskWindow();
         });
-        addButton.innerText = '+ Add Task';
+        addButton.innerText = ' + Add Task';
         
 
         addButton.type = 'text';
