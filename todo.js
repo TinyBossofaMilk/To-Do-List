@@ -28,11 +28,18 @@ let display = (() => {
         _createAddTaskButton();
     };
 
+    const _reloadTasks = () => {
+        _clearDisplayedTasks();
+        _populateTasksList();
+        _createAddTaskButton();
+    };
+
     const _createAddTaskButton = () => {
         const display = document.getElementById('display');
         
         const addButton = document.createElement('div');
         addButton.addEventListener('click', () => {
+            addButton.remove();
             _createEditTaskWindow();
         });
         addButton.innerText = '+ Add Task';
@@ -54,9 +61,7 @@ let display = (() => {
             project.addEventListener('click', () =>
             {
                 _activeProject = project.innerHTML;
-                _clearDisplayedTasks();
-                _populateTasksList();
-                _createAddTaskButton();
+                _reloadTasks();
             });
 
             projectsTab.appendChild(project);            
@@ -64,14 +69,53 @@ let display = (() => {
     };
 
     const _createEditTaskWindow = (item) => {
-        const display = document.getElementById('addTask');
-        const editTask = document.createElement('div');
+        const display = document.getElementById('display');
+        const editTaskWindow = document.createElement('div');
+        editTaskWindow.id = 'editTaskWindow';
 
-        const title = document.createElement('input');
-        title.type = 'text';
-        // title.input=
+        const titleInput = document.createElement('input');
+        titleInput.type = 'text';
+        titleInput.id = 'titleInput';
+        if(item)
+            titleInput.input = item.title;
 
-        console.log("edit task window");
+        const options = document.createElement('div');
+        
+        const submitButton = document.createElement('button');
+        submitButton.innerText = 'Submit';
+        submitButton.addEventListener('click', _submitTaskButton);
+        
+        const cancelButton = document.createElement('button');
+        cancelButton.innerText = 'Cancel';
+        cancelButton.addEventListener('click', _cancelButton);
+        //TO BE IMPLEMENTED LATER
+        // const priorityBar = document.createElement('div'); 
+
+        options.appendChild(submitButton);
+        options.appendChild(cancelButton);
+        editTaskWindow.appendChild(titleInput);
+        editTaskWindow.appendChild(options);
+
+        //makes the edit window.
+        display.appendChild(editTaskWindow);
+    };
+
+    //helper function for creating/edittaskwindow
+    const _submitTaskButton = () => 
+    {
+        //add task to active project
+        _projects[_activeProject].push(task(document.getElementById('titleInput').value, '', false));
+        
+        //reload tasks page
+        _reloadTasks();
+    };
+
+    //helper function for cancelling add task option
+    const _cancelButton = () => 
+    {
+        //clear edit window
+        document.getElementById('editTaskWindow').remove();
+        _createAddTaskButton();
     };
 
     //helper function for populating tasks display
@@ -85,17 +129,19 @@ let display = (() => {
         input.addEventListener('change', () => {task.isCompleted = input.checked;});
 
         const title = document.createElement('span');
+        title.classList.add('title');
         title.innerText = task.title;
 
         const edit = document.createElement('span');
         edit.innerText = 'edit';
         edit.addEventListener('click', _createEditTaskWindow)
         
-        const del = document.createElement('delete');
+        const del = document.createElement('span');
         del.innerText = 'del';
         del.addEventListener('click', () => {
-            // _projects[_activeProject] = 
-
+            const indexofDeletedTask = _projects[_activeProject].indexOf(task);
+            _projects[_activeProject].splice(indexofDeletedTask, 1);
+            _reloadTasks();
         });
 
         tempDiv.appendChild(input);

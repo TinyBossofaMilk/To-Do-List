@@ -1,5 +1,9 @@
-body
-{
+:root{
+    --section-padding: 10px;
+    --task-padding: 7px;
+}
+
+body{
     margin: 0;
     padding: 0;
 }
@@ -11,9 +15,13 @@ body
 }
 
 nav#projects {
-    flex-grow: 1;
+    /* flex-grow: 1; */
     min-width: 150px;
     background-color: mistyrose;
+    font-size: large;
+    font-weight:800;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    padding: var(--section-padding);
 }
 
 #display {
@@ -22,11 +30,28 @@ nav#projects {
     flex-direction: column;
 }
 
-#display input {
-    
+#display{
+    padding: 10px;
+    gap: 5px;
+    background-color: aliceblue;
 }
 
-item.high{
+.task {
+    display: flex;
+    /* justify-content: baseline; */
+}
+.task:hover {
+    background-color: steelblue;
+}
+.task .title {
+    flex-grow: 1;
+}
+
+.task *{
+    padding: 0 var(--task-padding);
+}
+
+.task.high{
     background-color: lightcoral;
 }
 
@@ -37,3 +62,4 @@ item.med{
 item.lo{
     background-color: aquamarine;
 }
+
