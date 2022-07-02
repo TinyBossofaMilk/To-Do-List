@@ -19,11 +19,9 @@ let display = (() => {
     let _activeProject = 'defaultProject';
 
     const _initialize = () => {
-        // give addToDo task button function
-        const addtask = document.getElementById('addtask');
-        
-        // const display = document.getElementById('display');
+        // const addtask = document.getElementById('addtask');
         _populateProjectsList();
+        _createAddProjectButton();
         _populateTasksList();
         _createAddTaskButton();
     };
@@ -34,22 +32,15 @@ let display = (() => {
         _createAddTaskButton();
     };
 
-    const _createAddTaskButton = () => {
-        const display = document.getElementById('display');
-        
-        const addButton = document.createElement('div');
-        addButton.addEventListener('click', () => {
-            addButton.remove();
-            _createEditTaskWindow();
-        });
-        addButton.innerText = ' + Add Task';
-        
-
-        addButton.type = 'text';
-
-
-        display.appendChild(addButton);
+    const _reloadProjects = () => {
+        _clearDisplayedProjects();       
+        _populateProjectsList();
+        _createAddProjectButton();
     };
+    
+
+/******************************************************************************************PROJECTS */
+
 
     const _populateProjectsList = () => {
         const projectsTab = document.getElementById('projects');
@@ -63,10 +54,54 @@ let display = (() => {
                 _activeProject = project.innerHTML;
                 _reloadTasks();
             });
-
             projectsTab.appendChild(project);            
         });
     };
+
+    const _createAddProjectButton = () => {
+        const projects = document.getElementById('projects');
+        
+        const addButton = document.createElement('div');
+        addButton.addEventListener('click', () => {
+            addButton.remove();
+            const projectCreationInput = document.createElement('input');
+            projectCreationInput.minLength = 1;
+            projects.appendChild(projectCreationInput);
+            projectCreationInput.addEventListener('keydown', _addProjectButtonEvent)
+        });
+        addButton.innerText = ' + Add Project';
+        
+        projects.appendChild(addButton);
+    };
+
+    const _addProjectButtonEvent = (e) => {
+        if(e.key === 'Enter')
+        {
+            // add new project, reload stuff.
+            let newProjectName = e.target.value;
+            console.log(newProjectName);
+            _projects[newProjectName] = [];
+            _activeProject = newProjectName;
+            _reloadProjects();
+            _reloadTasks();
+        }
+
+        if(e.key === 'Escape')
+        {
+            //revert projects
+            _reloadProjects();
+        }
+
+    };
+    
+    const _clearDisplayedProjects = () => 
+    {
+        const projects = document.getElementById('projects');
+        while(projects.hasChildNodes())
+            {projects.removeChild(projects.firstChild);}
+    };
+
+/******************************************************************************************TASKS */
 
     const _createEditTaskWindow = (item) => {
         const display = document.getElementById('display');
@@ -100,14 +135,26 @@ let display = (() => {
         //makes the edit window.
         display.appendChild(editTaskWindow);
     };
+    
+    const _createAddTaskButton = () => {
+        const display = document.getElementById('display');
+        
+        const addButton = document.createElement('div');
+        addButton.addEventListener('click', () => {
+            addButton.remove();
+            _createEditTaskWindow();
+        });
+        addButton.innerText = ' + Add Task';
+        
+        // addButton.type = 'text';
+        display.appendChild(addButton);
+    };
 
     //helper function for creating/edittaskwindow
     const _submitTaskButton = () => 
     {
         //add task to active project
         _projects[_activeProject].push(task(document.getElementById('titleInput').value, '', false));
-        
-        //reload tasks page
         _reloadTasks();
     };
 
@@ -197,16 +244,6 @@ let display = (() => {
         return editTaskWindow;
     };
 
-    const _submitEditTaskButton = () => {
-        //get input and find task in the project arr.
-        //replace old task with new task
-        //reload page
-    };
-
-    const _cancelEditButton = () => {
-        
-    };
-
     const _clearDisplayedTasks = () => {
         const display = document.getElementById('display');
         while(display.hasChildNodes())
@@ -215,17 +252,13 @@ let display = (() => {
 
     const _populateTasksList = () => {
         const display = document.getElementById('display');
+        console.log(_projects[_activeProject])
         for(const task of _projects[_activeProject])
         {
             display.appendChild(_createTaskElement(task));
         }
     };
 
-    //helper function for adding a task
-    const addTask = () => 
-    {
-
-    };
-
     _initialize();
+
 }) ();

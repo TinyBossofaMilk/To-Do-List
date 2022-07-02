@@ -53,21 +53,17 @@ nav#projects {
     background-color: aliceblue;
 }
 
-.task {
+#display>* {
     display: flex;
     padding: var(--task-padding);
     /* justify-content: baseline; */
 }
 
-.task:hover {
+#display>*:hover {
     background-color: steelblue;
 }
 .task .title {
     flex-grow: 1;
-}
-
-.task *{
-    padding: 0 var(--task-padding);
 }
 
 .task.high{
