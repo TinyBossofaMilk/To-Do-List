@@ -19,8 +19,7 @@ let display = (() => {
     let _activeProject = 'defaultProject';
 
     const _initialize = () => {
-        // const addtask = document.getElementById('addtask');
-        _populateProjectsList();
+        _populateProjectsList();        
         _createAddProjectButton();
         _populateTasksList();
         _createAddTaskButton();
@@ -39,7 +38,7 @@ let display = (() => {
     };
     
 
-/******************************************************************************************PROJECTS */
+/****************************************************************************************** PROJECTS */
 
 
     const _populateProjectsList = () => {
@@ -51,11 +50,17 @@ let display = (() => {
             project.innerHTML = name;
             project.addEventListener('click', () =>
             {
-                _activeProject = project.innerHTML;
+                //set project name to active project
+                _activeProject = project.innerHTML;                
+                _projectActiveClassSelector(project,'scope');
                 _reloadTasks();
             });
             projectsTab.appendChild(project);            
         });
+    };
+
+    const _projectInputIsValid = () => {
+
     };
 
     const _createAddProjectButton = () => {
@@ -66,8 +71,15 @@ let display = (() => {
             addButton.remove();
             const projectCreationInput = document.createElement('input');
             projectCreationInput.minLength = 1;
-            projects.appendChild(projectCreationInput);
+            projectCreationInput.required = true;
             projectCreationInput.addEventListener('keydown', _addProjectButtonEvent)
+            
+            const errorMessage = document.createElement('span');
+            errorMessage.classList.add('error');
+            errorMessage.ariaLive = 'polite';
+            
+            projects.appendChild(projectCreationInput);
+            projects.appendChild(errorMessage);
         });
         addButton.innerText = ' + Add Project';
         
@@ -75,11 +87,29 @@ let display = (() => {
     };
 
     const _addProjectButtonEvent = (e) => {
+        // console.log(e.target)
         if(e.key === 'Enter')
         {
+            const error = document.querySelector('#projects .error');
+            if(e.target.validity.valueMissing)
+            {
+                error.innerText = "You need to enter something!";
+                return false;
+            }
+            
+            const existingProjectNamesArr = Object.keys(_projects);
+
+            for(let name of existingProjectNamesArr)
+            {
+                if(name === (e.target.value))
+                {
+                    error.innerText = "Project name already exists!"
+                    return false;
+                } 
+            }
+
             // add new project, reload stuff.
-            let newProjectName = e.target.value;
-            console.log(newProjectName);
+            let newProjectName = e.target.value;            
             _projects[newProjectName] = [];
             _activeProject = newProjectName;
             _reloadProjects();
@@ -91,15 +121,26 @@ let display = (() => {
             //revert projects
             _reloadProjects();
         }
-
     };
-    
+
     const _clearDisplayedProjects = () => 
     {
         const projects = document.getElementById('projects');
         while(projects.hasChildNodes())
             {projects.removeChild(projects.firstChild);}
     };
+
+    const _projectActiveClassSelector = (activeProjectElement) => {
+        //remove active status off of other projects
+        //WARNING: ALSO STRIPS CLASS OFF OF '+ PROJECT BUTTON'
+        const projectElementArr = Array.from(document.querySelectorAll('#projects>div'));
+        for(const projecthtmlElement of projectElementArr)
+        {
+            projecthtmlElement.classList.remove('active');
+        }
+
+        activeProjectElement.classList.add('active');
+    }
 
 /******************************************************************************************TASKS */
 
@@ -148,22 +189,6 @@ let display = (() => {
         
         // addButton.type = 'text';
         display.appendChild(addButton);
-    };
-
-    //helper function for creating/edittaskwindow
-    const _submitTaskButton = () => 
-    {
-        //add task to active project
-        _projects[_activeProject].push(task(document.getElementById('titleInput').value, '', false));
-        _reloadTasks();
-    };
-
-    //helper function for cancelling add task option
-    const _cancelButton = () => 
-    {
-        //clear edit window
-        document.getElementById('editTaskWindow').remove();
-        _createAddTaskButton();
     };
 
     //helper function for populating tasks display
@@ -223,7 +248,7 @@ let display = (() => {
         submitButton.addEventListener('click', () => {
             let indexOfTask = _projects[_activeProject].indexOf(taskObj);
             _projects[_activeProject][indexOfTask] = task(titleInput.value, '', taskObj.isCompleted);
-            console.log(_projects[_activeProject][indexOfTask] )
+            // console.log(_projects[_activeProject][indexOfTask])
 
             _reloadTasks();
         });
@@ -244,6 +269,22 @@ let display = (() => {
         return editTaskWindow;
     };
 
+    //helper function for creating/edittaskwindow
+    const _submitTaskButton = () => 
+    {
+        //add task to active project
+        _projects[_activeProject].push(task(document.getElementById('titleInput').value, '', false));
+        _reloadTasks();
+    };
+
+    //helper function for cancelling add task option
+    const _cancelButton = () => 
+    {
+        //clear edit window
+        document.getElementById('editTaskWindow').remove();
+        _createAddTaskButton();
+    };
+
     const _clearDisplayedTasks = () => {
         const display = document.getElementById('display');
         while(display.hasChildNodes())
@@ -252,7 +293,6 @@ let display = (() => {
 
     const _populateTasksList = () => {
         const display = document.getElementById('display');
-        console.log(_projects[_activeProject])
         for(const task of _projects[_activeProject])
         {
             display.appendChild(_createTaskElement(task));

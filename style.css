@@ -39,8 +39,20 @@ nav#projects {
     padding: var(--section-padding);
 }
 
+#projects>.active
+{
+    border: 2px black solid;
+}
+
 #projects div:hover{
     background-color: rgb(248, 179, 171);
+}
+
+#projects .error
+{
+    display: block;
+    font-weight: normal;
+    font-size: small;
 }
 
 #display {
@@ -70,11 +82,15 @@ nav#projects {
     background-color: lightcoral;
 }
 
-item.med{
+.task.med{
     background-color: goldenrod;
 }
 
-item.lo{
+.task.lo{
     background-color: aquamarine;
 }
 
+input:invalid{
+    border-color: #900;
+    /* background-color: #FDD; */
+  }
